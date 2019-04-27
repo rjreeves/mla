@@ -1,0 +1,74 @@
+---
+title: "Practical Machine Learning Assignment"
+author: "Robert Reeves"
+date: "27 April 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(Encoding="UTF-8")
+```
+
+# Overview
+As per the assignment background...
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. 
+
+# Source
+Full Documentation and data citation
+Ugulino, W.; Cardador, D.; Vega, K.; Velloso, E.; Milidiu, R.; Fuks, H. Wearable Computing: Accelerometers' Data Classification of Body Postures and Movements. Proceedings of 21st Brazilian Symposium on Artificial Intelligence. Advances in Artificial Intelligence - SBIA 2012. In: Lecture Notes in Computer Science. , pp. 52-61. Curitiba, PR: Springer Berlin / Heidelberg, 2012. ISBN 978-3-642-34458-9. DOI: 10.1007/978-3-642-34459-6_6. 
+
+# Data
+The training data sourced from:
+https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv
+
+The test data sourced from:
+https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
+
+# Cleanup and preparation
+```{R Clean}
+library(caret)
+set.seed(5432)
+raw_df<-read.csv("pml-training.csv", header=T, na.strings=c("","NA", "#DIV/0!"))
+test_df<-read.csv("pml-testing.csv", header=T)
+clean_df<-raw_df[,colSums(is.na(raw_df))==0][8:60]
+in_train <- createDataPartition(clean_df$classe, p=0.6, list=FALSE)
+train <- clean_df[in_train,]
+valid<-clean_df[-in_train,]
+
+```
+
+
+
+# Using the 'train' data and Random Forest to train a model. 
+I repeated the training with 3, 5 and 7 folds, found 3 to be a satifactory value and quicker to calculate. 
+
+Note: I saved the model to make it easy to reporoduce the analysis without the wait time. Simply uncomment the 4 lines prior to run if you wish to fully redo the model training.
+
+```{r Training}
+#rf.model <- train(classe ~.,method="rf",
+#              data=train, 
+#              trControl = trainControl(method="cv"),number=3)
+
+#saveRDS(rf.model, "./model.rds")
+rf.model<-readRDS("model.rds")
+rf.model
+```
+The accuracy of 99% is highly acceptable.
+
+
+# Validating the model , predicting with 'valid' data
+```{r Validate}
+rf.predict<-predict(rf.model,valid)
+confusionMatrix(valid$classe, rf.predict)
+```
+As can be seen the accuracy, sensitivy and specificity are all very accepatble values on the validation data
+
+
+# Run the model on the 20 Test Cases in 'test_df'
+```{r Test}
+
+predicts<-predict(rf.model, test_df)
+print(predicts)
+
+```
