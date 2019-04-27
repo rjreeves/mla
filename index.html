@@ -439,8 +439,8 @@ rf.model</code></pre>
 ## The final value used for the model was mtry = 2.</code></pre>
 <p>The accuracy of 99% is highly acceptable.</p>
 </div>
-<div id="validating-the-model-predicting-in-the-valid-data" class="section level1">
-<h1>Validating the model , predicting in the ‘valid’ data</h1>
+<div id="validating-the-model-predicting-with-valid-data" class="section level1">
+<h1>Validating the model , predicting with ‘valid’ data</h1>
 <pre class="r"><code>rf.predict&lt;-predict(rf.model,valid)
 confusionMatrix(valid$classe, rf.predict)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
@@ -479,9 +479,10 @@ confusionMatrix(valid$classe, rf.predict)</code></pre>
 </div>
 <div id="run-the-model-on-the-20-test-cases-in-test_df" class="section level1">
 <h1>Run the model on the 20 Test Cases in ‘test_df’</h1>
-<pre class="r"><code>#predicts&lt;-predict(rf.model, test_df)
-#confusionMatrix(test_df$classe, predicts)
-#print(predicts)</code></pre>
+<pre class="r"><code>predicts&lt;-predict(rf.model, test_df)
+print(predicts)</code></pre>
+<pre><code>##  [1] B A B A A E D B A A B C B A E E A B B B
+## Levels: A B C D E</code></pre>
 </div>
 
 

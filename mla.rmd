@@ -57,7 +57,7 @@ rf.model
 The accuracy of 99% is highly acceptable.
 
 
-# Validating the model , predicting in the 'valid' data
+# Validating the model , predicting with 'valid' data
 ```{r Validate}
 rf.predict<-predict(rf.model,valid)
 confusionMatrix(valid$classe, rf.predict)
@@ -68,8 +68,7 @@ As can be seen the accuracy, sensitivy and specificity are all very accepatble v
 # Run the model on the 20 Test Cases in 'test_df'
 ```{r Test}
 
-#predicts<-predict(rf.model, test_df)
-#confusionMatrix(test_df$classe, predicts)
-#print(predicts)
+predicts<-predict(rf.model, test_df)
+print(predicts)
 
 ```
