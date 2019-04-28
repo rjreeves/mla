@@ -384,7 +384,7 @@ $(document).ready(function () {
 
 <div id="overview" class="section level1">
 <h1>Overview</h1>
-<p>As per the assignment background… Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways.</p>
+<p>As per the assignment background… Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways.</p>
 </div>
 <div id="source" class="section level1">
 <h1>Source</h1>
@@ -395,8 +395,9 @@ $(document).ready(function () {
 <p>The training data sourced from: <a href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv" class="uri">https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv</a></p>
 <p>The test data sourced from: <a href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv" class="uri">https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv</a></p>
 </div>
-<div id="cleanup-and-preparation" class="section level1">
-<h1>Cleanup and preparation</h1>
+<div id="load-cleanup-and-preparation-of-the-data-from-the-.csv-files" class="section level1">
+<h1>Load, Cleanup and preparation of the data from the .csv files</h1>
+<p>Removing all columns/variables with NA and drop the first 7 column that are not required for modeling and prediction</p>
 <pre class="r"><code>library(caret)</code></pre>
 <pre><code>## Loading required package: lattice</code></pre>
 <pre><code>## Loading required package: ggplot2</code></pre>
@@ -412,12 +413,12 @@ valid&lt;-clean_df[-in_train,]</code></pre>
 <h1>Using the ‘train’ data and Random Forest to train a model.</h1>
 <p>I repeated the training with 3, 5 and 7 folds, found 3 to be a satifactory value and quicker to calculate.</p>
 <p>Note: I saved the model to make it easy to reporoduce the analysis without the wait time. Simply uncomment the 4 lines prior to run if you wish to fully redo the model training.</p>
-<pre class="r"><code>#rf.model &lt;- train(classe ~.,method=&quot;rf&quot;,
-#              data=train, 
-#              trControl = trainControl(method=&quot;cv&quot;),number=3)
+<pre class="r"><code>rf.model &lt;- train(classe ~.,method=&quot;rf&quot;,
+              data=train, 
+              trControl = trainControl(method=&quot;cv&quot;),number=3)
 
 #saveRDS(rf.model, &quot;./model.rds&quot;)
-rf.model&lt;-readRDS(&quot;model.rds&quot;)
+#rf.model&lt;-readRDS(&quot;model.rds&quot;)
 rf.model</code></pre>
 <pre><code>## Random Forest 
 ## 
@@ -477,8 +478,8 @@ confusionMatrix(valid$classe, rf.predict)</code></pre>
 ## Balanced Accuracy      0.9973   0.9927   0.9861   0.9965   0.9992</code></pre>
 <p>As can be seen the accuracy, sensitivy and specificity are all very accepatble values on the validation data</p>
 </div>
-<div id="run-the-model-on-the-20-test-cases-in-test_df" class="section level1">
-<h1>Run the model on the 20 Test Cases in ‘test_df’</h1>
+<div id="using-the-model-on-the-20-test-cases-in-test_df" class="section level1">
+<h1>Using the model on the 20 Test Cases in ‘test_df’</h1>
 <pre class="r"><code>predicts&lt;-predict(rf.model, test_df)
 print(predicts)</code></pre>
 <pre><code>##  [1] B A B A A E D B A A B C B A E E A B B B
